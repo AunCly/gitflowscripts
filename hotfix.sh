@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#############################
+#  Script creation hotfix.  #
+#############################
+
 # on se place dans le bon repo
 cd && cd sites/site_stimbiz
 
