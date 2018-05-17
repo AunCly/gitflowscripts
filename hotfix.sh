@@ -6,7 +6,9 @@
 # on se place dans le bon repo
 cd && cd sites/site_stimbiz
 
-tag=`git describe`
+change="false"
+
+tag=`git describe --abbrev=0 --tags`
 
 message=`pwd`
 echo "Vous êtes dans le dossier $message version $tag"
@@ -23,13 +25,17 @@ echo "new tag $new_tag"
 
 # on check si il y a des changement en cours
 if git diff-index --quiet HEAD --; then
-	read -p "Changements non commité stash les changements ? : Y/N" response
+	echo "no uncommited files"
+else
+	read -p 'Changements non commité stash les changements ? Y/N : ' response
 	# Si oui on propose de les stash pour créer le hotfix
-	if $response="Y" ; then
-		change=true
-    	git stash
+	if [ $response = "Y" ] ; then
+		change="true"
+		echo "On stash les chagements"
+    	#git stash
     #si non on force le fermeture du script	
     else
+    	echo "On ne stash pas les chagements et on quitte le script"
     	exit 1
 	fi
 fi
@@ -38,7 +44,7 @@ fi
 git flow hotfix start "${array[0]}.${array[1]}.$tag"
 
 # on recupere les changement stash
-if [[ change ]]; then
+if [ change = "true" ]; then
 	git stash pop
 fi
 
